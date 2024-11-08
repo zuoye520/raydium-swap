@@ -42,14 +42,14 @@ const swap = async () => {
       )
       if (executeSwap) {
         const txid = useVersionedTransaction
-          ? await raydiumSwap.sendVersionedTransaction(tx as VersionedTransaction)
-          : await raydiumSwap.sendLegacyTransaction(tx as Transaction)
+          ? await raydiumSwap.sendVersionedTransaction(VersionedTransaction)
+          : await raydiumSwap.sendLegacyTransaction(Transaction)
     
         console.log(`https://solscan.io/tx/${txid}`)
       } else {
         const simRes = useVersionedTransaction
-          ? await raydiumSwap.simulateVersionedTransaction(tx as VersionedTransaction)
-          : await raydiumSwap.simulateLegacyTransaction(tx as Transaction)
+          ? await raydiumSwap.simulateVersionedTransaction(VersionedTransaction)
+          : await raydiumSwap.simulateLegacyTransaction(Transaction)
     
         console.log(simRes)
       }
