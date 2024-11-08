@@ -1,7 +1,8 @@
-import RaydiumSwap from './RaydiumSwap'
+import RaydiumSwap from './RaydiumSwap.js'
 import { Transaction, VersionedTransaction, LAMPORTS_PER_SOL } from '@solana/web3.js'
 import dotenv from 'dotenv';
 dotenv.config();
+
 const swap = async () => {
   // const baseMint = 'So11111111111111111111111111111111111111112' // e.g. SOLANA mint address
   // const quoteMint = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' // e.g. USDC mint address
@@ -29,38 +30,34 @@ const swap = async () => {
 
   // console.log('Found pool info', poolInfo)
 
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 1; i++) {
     try {
       const tx = await raydiumSwap.getSwapTransaction(
         quoteMint,
         tokenAAmount,
         poolInfo,
-        0 * LAMPORTS_PER_SOL, // Prioritization fee, now set to (0.0005 SOL)
+        0.0001 * LAMPORTS_PER_SOL, // Prioritization fee, now set to (0.0005 SOL)
         useVersionedTransaction,
         'in',
         90 // Slippage
       )
       if (executeSwap) {
         const txid = useVersionedTransaction
-          ? await raydiumSwap.sendVersionedTransaction(VersionedTransaction)
-          : await raydiumSwap.sendLegacyTransaction(Transaction)
+          ? await raydiumSwap.sendVersionedTransaction(tx)
+          : await raydiumSwap.sendLegacyTransaction(tx)
     
         console.log(`https://solscan.io/tx/${txid}`)
       } else {
         const simRes = useVersionedTransaction
-          ? await raydiumSwap.simulateVersionedTransaction(VersionedTransaction)
-          : await raydiumSwap.simulateLegacyTransaction(Transaction)
+          ? await raydiumSwap.simulateVersionedTransaction(tx)
+          : await raydiumSwap.simulateLegacyTransaction(tx)
     
         console.log(simRes)
       }
     } catch (error) {
-      console.error('error:',error)
+      console.error('error:', error)
     }
-    
   }
-  
 }
 
 swap()
-swap()
-// swap()
